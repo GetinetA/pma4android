@@ -27,19 +27,16 @@ public class DownloaderTaskFragment extends Fragment {
 		// Preserve across reconfigurations
 		setRetainInstance(true);
 		
-		// TODO: Create new DownloaderTask that "downloads" data
+		// DONE: Create new DownloaderTask that "downloads" data
+        DownloaderTask mDownloader = new DownloaderTask();
 
-        
-		
-		// TODO: Retrieve arguments from DownloaderTaskFragment
-		// Prepare them for use with DownloaderTask. 
+		// DONE: Retrieve arguments from DownloaderTaskFragment
+		// Prepare them for use with DownloaderTask.
+        Integer[] resourceIDS = {};
+        resourceIDS = getArguments().getIntegerArrayList(MainActivity.TAG_FRIEND_RES_IDS).toArray(resourceIDS);
 
-        
-        
-        
-		// TODO: Start the DownloaderTask 
-		
-        
+		// DONE: Start the DownloaderTask
+        mDownloader.execute(resourceIDS);
 
 	}
 
@@ -73,59 +70,60 @@ public class DownloaderTaskFragment extends Fragment {
 	// out). Ultimately, it must also pass newly available data back to 
 	// the hosting Activity using the DownloadFinishedListener interface.
 
-//	public class DownloaderTask extends ... {
-	
+	public class DownloaderTask extends AsyncTask<Integer,Void,String[]> {
 
-    
-    
-    
-    
-    
-    
-    
-        // TODO: Uncomment this helper method
-		// Simulates downloading Twitter data from the network
+        @Override
+        protected String[] doInBackground(Integer... resourceIDS) {
+            return downloadTweets(resourceIDS);
+        }
 
-        /*
-         private String[] downloadTweets(Integer resourceIDS[]) {
-			final int simulatedDelay = 2000;
-			String[] feeds = new String[resourceIDS.length];
-			try {
-				for (int idx = 0; idx < resourceIDS.length; idx++) {
-					InputStream inputStream;
-					BufferedReader in;
-					try {
-						// Pretend downloading takes a long time
-						Thread.sleep(simulatedDelay);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+        @Override
+        protected void onPostExecute(String[] result) {
+            mCallback.notifyDataRefreshed(result);
+        }
 
-					inputStream = mContext.getResources().openRawResource(
-							resourceIDS[idx]);
-					in = new BufferedReader(new InputStreamReader(inputStream));
+        // DONE: Uncomment this helper method
+        // Simulates downloading Twitter data from the network
 
-					String readLine;
-					StringBuffer buf = new StringBuffer();
+        private String[] downloadTweets(Integer resourceIDS[]) {
+            final int simulatedDelay = 2000;
+            String[] feeds = new String[resourceIDS.length];
+            try {
+                for (int idx = 0; idx < resourceIDS.length; idx++) {
+                    InputStream inputStream;
+                    BufferedReader in;
+                    try {
+                        // Pretend downloading takes a long time
+                        Thread.sleep(simulatedDelay);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
-					while ((readLine = in.readLine()) != null) {
-						buf.append(readLine);
-					}
+                    inputStream = mContext.getResources().openRawResource(
+                            resourceIDS[idx]);
+                    in = new BufferedReader(new InputStreamReader(inputStream));
 
-					feeds[idx] = buf.toString();
+                    String readLine;
+                    StringBuffer buf = new StringBuffer();
 
-					if (null != in) {
-						in.close();
-					}
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+                    while ((readLine = in.readLine()) != null) {
+                        buf.append(readLine);
+                    }
 
-			return feeds;
-		}
-         */
+                    feeds[idx] = buf.toString();
 
+                    if (null != in) {
+                        in.close();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return feeds;
+        }
+
+    }
 
     
     
