@@ -218,3 +218,14 @@ pip-log.txt
 #
 .gradle/
 .idea/
+app.iml
+build.gradle
+libs/
+lint.xml
+build.gradle
+gradle/
+gradlew
+gradlew.bat
+import-summary.txt
+my.iml
+settings.gradle
